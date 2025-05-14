@@ -1,0 +1,58 @@
+{
+    "description": "Investment Portfolio Optimization",
+    "num_objects": 8,
+    "num_capacities": 2,
+    "capacity1": 1000000.0,
+    "capacity2": 100.0,
+    "resolution_type": "Continue",
+    "items": [
+        {
+            "name": "Tech Stocks",
+            "value": 25.0,
+            "weight": 100000.0,
+            "volume": 20.0
+        },
+        {
+            "name": "Government Bonds",
+            "value": 8.0,
+            "weight": 150000.0,
+            "volume": 10.0
+        },
+        {
+            "name": "Real Estate",
+            "value": 15.0,
+            "weight": 300000.0,
+            "volume": 40.0
+        },
+        {
+            "name": "Cryptocurrencies",
+            "value": 40.0,
+            "weight": 50000.0,
+            "volume": 15.0
+        },
+        {
+            "name": "Commodities",
+            "value": 12.0,
+            "weight": 80000.0,
+            "volume": 25.0
+        },
+        {
+            "name": "Startup Investments",
+            "value": 35.0,
+            "weight": 200000.0,
+            "volume": 30.0
+        },
+        {
+            "name": "Blue Chip Stocks",
+            "value": 18.0,
+            "weight": 250000.0,
+            "volume": 20.0
+        },
+        {
+            "name": "ETFs",
+            "value": 10.0,
+            "weight": 120000.0,
+            "volume": 15.0
+        }
+    ]
+}

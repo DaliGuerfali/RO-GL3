@@ -1,0 +1,14 @@
+{
+  "description": "City Garbage Collection",
+  "locations": [
+    {"name": "Depot", "x": 0, "y": 0},
+    {"name": "Zone A", "x": 2, "y": 5},
+    {"name": "Zone B", "x": -3, "y": 4},
+    {"name": "Zone C", "x": 5, "y": -2},
+    {"name": "Zone D", "x": -4, "y": -3},
+    {"name": "Zone E", "x": 3, "y": 3}
+  ],
+  "vehicles": 3,
+  "max_dist": 15.0,
+  "forbidden": "2-5,4-3"
+}

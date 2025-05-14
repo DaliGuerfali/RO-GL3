@@ -1,0 +1,63 @@
+{
+    "description": "University Course Selection",
+    "num_objects": 8,
+    "num_capacities": 1,
+    "capacity1": 20.0,
+    "capacity2": 0.0,
+    "resolution_type": "Binaire",
+    "items": [
+        {
+            "name": "Advanced Math",
+            "value": 85.0,
+            "weight": 4.0,
+            "volume": 0.0
+        },
+        {
+            "name": "Computer Science",
+            "value": 90.0,
+            "weight": 4.0,
+            "volume": 0.0
+        },
+        {
+            "name": "Physics",
+            "value": 75.0,
+            "weight": 3.0,
+            "volume": 0.0
+        },
+        {
+            "name": "Statistics",
+            "value": 70.0,
+            "weight": 3.0,
+            "volume": 0.0
+        },
+        {
+            "name": "Data Science",
+            "value": 95.0,
+            "weight": 4.0,
+            "volume": 0.0
+        },
+        {
+            "name": "Machine Learning",
+            "value": 88.0,
+            "weight": 4.0,
+            "volume": 0.0
+        },
+        {
+            "name": "Programming",
+            "value": 82.0,
+            "weight": 3.0,
+            "volume": 0.0
+        },
+        {
+            "name": "Algorithms",
+            "value": 78.0,
+            "weight": 3.0,
+            "volume": 0.0
+        }
+    ],
+    "constraints_info": [
+        "x[1] + x[5] <= 1  # Can't take both Computer Science and Machine Learning",
+        "x[0] + x[2] >= 1  # Must take either Math or Physics",
+        "x[3] + x[4] <= 1  # Can't take both Statistics and Data Science"
+    ]
+}

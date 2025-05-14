@@ -1,0 +1,14 @@
+{
+  "description": "Seasonal Demand Planning",
+  "periods": 6,
+  "prod_cost": 2.5,
+  "inv_cost": 0.8,
+  "demands": [
+    100,
+    150,
+    120,
+    180,
+    160,
+    130
+  ]
+}

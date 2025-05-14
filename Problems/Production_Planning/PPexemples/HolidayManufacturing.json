@@ -1,0 +1,16 @@
+{
+  "description": "Holiday Season Manufacturing",
+  "periods": 8,
+  "prod_cost": 4.0,
+  "inv_cost": 1.5,
+  "demands": [
+    50,
+    80,
+    120,
+    200,
+    180,
+    140,
+    100,
+    60
+  ]
+}
