@@ -10,6 +10,7 @@ ctk.set_default_color_theme("blue")
 
 class ModernKnapsackApp:
     def __init__(self, root):
+        # Initialisation de la fenêtre principale et des variables du modèle
         self.root = root
         self.root.title("KnapSack_ZELLO")
         self.root.geometry("700x700")  # Increased width for better centering
@@ -43,7 +44,7 @@ class ModernKnapsackApp:
         self.create_widgets()
         
     def create_widgets(self):
-        # Problem configuration section
+        # Création des composants de l'interface : configuration du problème (nombre d'objets, capacités, type)
         config_frame = ctk.CTkFrame(self.main_frame)
         config_frame.grid(row=0, column=0, sticky="ew", pady=(0, 20))
         config_frame.grid_columnconfigure((0, 1, 2), weight=1)  # Equal column weights for centering
@@ -133,6 +134,7 @@ class ModernKnapsackApp:
         self.update_capacities()
 
     def generate_inputs(self):
+        # Génère dynamiquement les champs pour chaque objet (Nom, Valeur, Poids, Volume)
         for widget in self.inputs_frame.winfo_children():
             widget.destroy()
             
@@ -167,6 +169,7 @@ class ModernKnapsackApp:
                     row=i+1, column=3, padx=10, pady=5)
 
     def update_capacities(self):
+        # Affiche ou masque le champ de volume selon le nombre de capacités sélectionné
         if self.num_capacities.get() == 2:
             self.capacity2_widgets[0].grid(row=1, column=0, columnspan=2, pady=10)
             self.capacity2_widgets[1].grid(row=0, column=0, padx=10)
@@ -177,6 +180,7 @@ class ModernKnapsackApp:
         self.generate_inputs()
 
     def add_constraint(self):
+        # Fenêtre d'ajout de contrainte linéaire personnalisée
         constraint_window = ctk.CTkToplevel(self.root)
         constraint_window.title("Add Constraint")
         constraint_window.geometry("400x200")
@@ -201,6 +205,7 @@ class ModernKnapsackApp:
 
     def solve_knapsack(self, names, values, weights, volumes, capacities, constraints, resolution_type):
         """Solve the knapsack problem using Gurobi"""
+        # Construction et résolution du modèle Gurobi pour le problème de sac à dos
         try:
             model = Model("Dynamic Knapsack")
             n = len(values)
@@ -236,6 +241,7 @@ class ModernKnapsackApp:
             return None, None
 
     def save_config(self):
+        # Sauvegarde de la configuration actuelle dans un fichier JSON
         config = {
             'num_objects': self.num_objects.get(),
             'num_capacities': self.num_capacities.get(),
@@ -263,6 +269,7 @@ class ModernKnapsackApp:
             messagebox.showerror("Error", f"Failed to save configuration: {e}")
 
     def load_config(self):
+        # Chargement d'une configuration JSON et mise à jour de l'interface
         examples_dir = Path(__file__).parent / 'SACexemples'
         filename = filedialog.askopenfilename(initialdir=str(examples_dir), filetypes=[("JSON files", "*.json")])
         if not filename:
@@ -291,6 +298,7 @@ class ModernKnapsackApp:
                 self.volumes[i].set(item.get('volume', self.volumes[i].get()))
 
     def solve(self):
+        # Collecte des données, appel au solveur et affichage du résultat
         try:
             names = [n.get() for n in self.names]
             values = [v.get() for v in self.values]

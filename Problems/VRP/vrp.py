@@ -132,7 +132,7 @@ class ModernVRPApp:
         messagebox.showinfo('Loaded', 'Configuration loaded successfully!')
 
     def solve_vrp(self):
-        # gather data and solve in a try/finally to restore button
+        # collecter les coordonnées et noms
         coords, names = [], []
         for nm, (x, y) in zip(self.name_inputs, self.coord_inputs):
             try:
@@ -151,30 +151,57 @@ class ModernVRPApp:
         self.solve_btn.configure(state='disabled', text='Solving...')
         self.root.update()
         try:
-            # build model
+            # construction du modèle Gurobi pour le VRP
             model = Model('VRP')
-            model.setParam('TimeLimit', 60)
-            model.setParam('MIPGap', 0.05)
+            model.setParam('TimeLimit', 60)  # limite de temps
+            model.setParam('MIPGap', 0.05)   # tolérance d'optimalité
+
+            # variable binaire x[i,j,k] = 1 si le véhicule k va de i à j
             x = model.addVars(n, n, m, vtype=GRB.BINARY, name='x')
+            # variable continue t[i,k] pour l'ordre de visite (MTZ)
             t = model.addVars(n, m, vtype=GRB.CONTINUOUS, name='t')
-            # objective
+
+            # objectif : minimiser la distance totale parcourue
             model.setObjective(
                 quicksum(dist[i, j] * x[i, j, k]
                          for i in range(n) for j in range(n) for k in range(m) if i != j),
                 GRB.MINIMIZE
             )
-            # constraints
+
+            # chaque client (j≠0) doit être visité exactement une fois par une des m voitures
             for j in range(1, n):
-                model.addConstr(quicksum(x[i, j, k] for i in range(n) for k in range(m) if i != j) == 1)
+                model.addConstr(
+                    quicksum(x[i, j, k] for i in range(n) for k in range(m) if i != j) == 1,
+                    name=f"visit_once_{j}"
+                )
+
+            # chaque véhicule k part du dépôt (0) et y revient
             for k in range(m):
-                model.addConstr(quicksum(x[0, j, k] for j in range(1, n)) == 1)
-                model.addConstr(quicksum(x[i, 0, k] for i in range(1, n)) == 1)
+                model.addConstr(quicksum(x[0, j, k] for j in range(1, n)) == 1, name=f"depart_{k}")
+                model.addConstr(quicksum(x[i, 0, k] for i in range(1, n)) == 1, name=f"retour_{k}")
+
+            # élimination des sous-tours (MTZ) : si k va i->j, alors t[j,k] >= t[i,k] + 1
+            M = n  # grosse constante
+            for k in range(m):
+                model.addConstr(t[0, k] == 0, name=f"time_depot_{k}")
                 for i in range(n):
                     for j in range(1, n):
                         if i != j:
-                            model.addConstr(t[j, k] >= t[i, k] + 1 - n * (1 - x[i, j, k]))
-                model.addConstr(t[0, k] == 0)
-            # forbidden routes
+                            model.addConstr(
+                                t[j, k] >= t[i, k] + 1 - M * (1 - x[i, j, k]),
+                                name=f"mtz_{i}_{j}_{k}"
+                            )
+
+            # conservation de flux : si une voiture arrive en j, elle doit aussi en repartir
+            for k in range(m):
+                for j in range(1, n):
+                    model.addConstr(
+                        quicksum(x[i, j, k] for i in range(n) if i != j) ==
+                        quicksum(x[j, i, k] for i in range(n) if i != j),
+                        name=f"flow_{j}_{k}"
+                    )
+
+            # contraintes utilisateurs : routes interdites
             for route in self.restrict_var.get().split(','):
                 if '-' in route:
                     try:
@@ -184,13 +211,17 @@ class ModernVRPApp:
                             model.addConstr(x[b-1, a-1, k] == 0)
                     except ValueError:
                         pass
-            # max distance
+            # contrainte de distance maximale par véhicule
             md = self.max_dist_var.get()
             if md > 0:
                 for k in range(m):
-                    model.addConstr(quicksum(dist[i, j] * x[i, j, k]
-                                              for i in range(n) for j in range(n) if i != j) <= md)
-            # optimize
+                    model.addConstr(
+                        quicksum(dist[i, j] * x[i, j, k]
+                                 for i in range(n) for j in range(n) if i != j) <= md,
+                        name=f"maxdist_{k}"
+                    )
+
+            # résolution
             model.optimize()
             if model.status not in (GRB.OPTIMAL, GRB.TIME_LIMIT):
                 messagebox.showerror('Error', 'No feasible solution found')

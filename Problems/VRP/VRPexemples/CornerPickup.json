@@ -1,0 +1,13 @@
+{
+  "description": "Corner Pickup",
+  "locations": [
+    {"name": "Depot", "x": 0, "y": 0},
+    {"name": "NE", "x": 10, "y": 10},
+    {"name": "NW", "x": -10, "y": 10},
+    {"name": "SW", "x": -10, "y": -10},
+    {"name": "SE", "x": 10, "y": -10}
+  ],
+  "vehicles": 2,
+  "max_dist": 60.0,
+  "forbidden": ""
+}
