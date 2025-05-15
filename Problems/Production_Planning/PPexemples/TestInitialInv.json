@@ -1,0 +1,7 @@
+{
+  "periods": 3,
+  "prod_cost": 1.0,
+  "inv_cost": 0.5,
+  "init_inv": 10,
+  "demands": [5, 8, 7]
+}
