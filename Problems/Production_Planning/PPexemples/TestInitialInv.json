@@ -3,5 +3,7 @@
   "prod_cost": 1.0,
   "inv_cost": 0.5,
   "init_inv": 10,
+  "prod_cap": 1000000.0,
+  "inv_cap": 1000000.0,
   "demands": [5, 8, 7]
 }

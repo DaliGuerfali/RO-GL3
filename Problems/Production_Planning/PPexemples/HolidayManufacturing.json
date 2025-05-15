@@ -3,6 +3,8 @@
   "periods": 8,
   "prod_cost": 4.0,
   "inv_cost": 1.5,
+  "prod_cap": 1000000.0,
+  "inv_cap": 1000000.0,
   "demands": [
     50,
     80,

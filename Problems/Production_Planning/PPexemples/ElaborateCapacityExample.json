@@ -1,0 +1,10 @@
+{
+  "description": "Elaborate Capacity‐Bound Production Planning Example",
+  "periods": 6,
+  "prod_cost": 2.0,
+  "inv_cost": 0.5,
+  "init_inv": 5,
+  "prod_cap": 20.0,
+  "inv_cap": 100.0,
+  "demands": [10, 15, 30, 5, 20, 10]
+}

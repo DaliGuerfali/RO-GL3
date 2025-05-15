@@ -1,0 +1,10 @@
+{
+  "description": "Inventory Depletion Only Example",
+  "periods": 4,
+  "prod_cost": 5.0,
+  "inv_cost": 0.5,
+  "init_inv": 50,
+  "prod_cap": 0.0,
+  "inv_cap": 100.0,
+  "demands": [10, 10, 10, 10]
+}

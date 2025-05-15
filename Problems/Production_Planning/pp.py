@@ -64,6 +64,16 @@ class ProductionPlanningApp:
         self.init_inv_var = tk.DoubleVar(value=0.0)
         ctk.CTkEntry(frame_cost, textvariable=self.init_inv_var, width=80).pack(side=tk.LEFT, padx=5)
 
+        # Capacity inputs
+        frame_cons = ctk.CTkFrame(self.container)
+        frame_cons.pack(fill=tk.X, pady=5)
+        ctk.CTkLabel(frame_cons, text="Prod Cap/unit:").pack(side=tk.LEFT, padx=5)
+        self.prod_cap_var = tk.DoubleVar(value=1000000.0)
+        ctk.CTkEntry(frame_cons, textvariable=self.prod_cap_var, width=80).pack(side=tk.LEFT, padx=5)
+        ctk.CTkLabel(frame_cons, text="Inv Cap/unit:").pack(side=tk.LEFT, padx=5)
+        self.inv_cap_var = tk.DoubleVar(value=1000000.0)
+        ctk.CTkEntry(frame_cons, textvariable=self.inv_cap_var, width=80).pack(side=tk.LEFT, padx=5)
+
         # Dynamic demand inputs
         self.input_frame = ctk.CTkFrame(self.container)
         self.input_frame.pack(fill=tk.X, pady=10)
@@ -114,11 +124,18 @@ class ProductionPlanningApp:
             prod_cost = self.prod_cost_var.get()
             inv_cost = self.inv_cost_var.get()
             init_inv = self.init_inv_var.get()
+            prod_cap = self.prod_cap_var.get()
+            inv_cap = self.inv_cap_var.get()
 
             # create model
             model = Model("ProductionPlanning")
             x = model.addVars(T, lb=0, vtype=GRB.CONTINUOUS, name="prod")
             I = model.addVars(T, lb=0, vtype=GRB.CONTINUOUS, name="inv")
+
+            # capacity constraints
+            for t in range(T):
+                model.addConstr(x[t] <= prod_cap, name=f"prod_cap_{t}")
+                model.addConstr(I[t] <= inv_cap, name=f"inv_cap_{t}")
 
             # inventory balance
             for t in range(T):
@@ -171,6 +188,8 @@ class ProductionPlanningApp:
             'prod_cost': self.prod_cost_var.get(),
             'inv_cost': self.inv_cost_var.get(),
             'init_inv': self.init_inv_var.get(),
+            'prod_cap': self.prod_cap_var.get(),
+            'inv_cap': self.inv_cap_var.get(),
             'demands': [v.get() for v in self.demand_vars]
         }
         fn = filedialog.asksaveasfilename(defaultextension='.json', filetypes=[('JSON files','*.json')])
@@ -207,6 +226,8 @@ class ProductionPlanningApp:
         self.prod_cost_var.set(cfg.get('prod_cost', self.prod_cost_var.get()))
         self.inv_cost_var.set(cfg.get('inv_cost', self.inv_cost_var.get()))
         self.init_inv_var.set(cfg.get('init_inv', self.init_inv_var.get()))
+        self.prod_cap_var.set(cfg.get('prod_cap', self.prod_cap_var.get()))
+        self.inv_cap_var.set(cfg.get('inv_cap', self.inv_cap_var.get()))
         self.update_inputs()
         demands = cfg.get('demands', [])
         for i, val in enumerate(demands):
