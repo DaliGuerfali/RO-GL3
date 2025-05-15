@@ -10,7 +10,7 @@ class MainApplication:
         self.window.configure(bg="#23272f")
         self.window.resizable(False, False)
 
-        # Sidebar for navigation (modern look)
+        # Sidebar for navigation 
         self.sidebar = tk.Frame(self.window, bg="#181c22", width=220, relief=tk.RAISED, bd=0)
         self.sidebar.pack(side=tk.LEFT, fill=tk.Y)
         logo = tk.Label(self.sidebar, text="OR DASHBOARD", fg="#00e676", bg="#181c22", font=("Segoe UI", 20, "bold"), pady=30)
@@ -28,7 +28,7 @@ class MainApplication:
             )
             btn.pack(fill=tk.X, pady=(0, 10), padx=30)
 
-        # Container for frames (rounded corners effect)
+        # Container for frames
         self.container = tk.Frame(self.window, bg="#2c313c", bd=0, highlightthickness=0)
         self.container.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=30, pady=30)
 
@@ -50,11 +50,11 @@ class MainApplication:
         pass
     def show_vrp(self):
         self.show_frame('VRPFrame')
-        # subprocess.Popen is now only called from the button in VRPFrame
+        
 
     def show_prodplan(self):
         self.show_frame('ProdPlanFrame')
-        # subprocess.Popen is now only called from the button in ProdPlanFrame
+
 
     def show_about(self): self.show_frame('AboutFrame')
 
