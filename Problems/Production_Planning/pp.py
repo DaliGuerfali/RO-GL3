@@ -46,6 +46,9 @@ class ProductionPlanningApp:
         ctk.CTkLabel(frame_cost, text="Inv Cost/unit:").pack(side=tk.LEFT, padx=5)
         self.inv_cost_var = tk.DoubleVar(value=0.5)
         ctk.CTkEntry(frame_cost, textvariable=self.inv_cost_var, width=80).pack(side=tk.LEFT, padx=5)
+        ctk.CTkLabel(frame_cost, text="Initial Inv:").pack(side=tk.LEFT, padx=5)
+        self.init_inv_var = tk.DoubleVar(value=0.0)
+        ctk.CTkEntry(frame_cost, textvariable=self.init_inv_var, width=80).pack(side=tk.LEFT, padx=5)
 
         # Dynamic demand inputs
         self.input_frame = ctk.CTkFrame(self.container)
@@ -96,6 +99,7 @@ class ProductionPlanningApp:
             demands = [var.get() for var in self.demand_vars]
             prod_cost = self.prod_cost_var.get()
             inv_cost = self.inv_cost_var.get()
+            init_inv = self.init_inv_var.get()
 
             # create model
             model = Model("ProductionPlanning")
@@ -105,7 +109,7 @@ class ProductionPlanningApp:
             # inventory balance
             for t in range(T):
                 if t == 0:
-                    model.addConstr(I[t] == x[t] - demands[t])
+                    model.addConstr(I[t] == init_inv + x[t] - demands[t])
                 else:
                     model.addConstr(I[t] == I[t-1] + x[t] - demands[t])
 
@@ -152,6 +156,7 @@ class ProductionPlanningApp:
             'periods': self.periods_var.get(),
             'prod_cost': self.prod_cost_var.get(),
             'inv_cost': self.inv_cost_var.get(),
+            'init_inv': self.init_inv_var.get(),
             'demands': [v.get() for v in self.demand_vars]
         }
         fn = filedialog.asksaveasfilename(defaultextension='.json', filetypes=[('JSON files','*.json')])
@@ -187,6 +192,7 @@ class ProductionPlanningApp:
         self.periods_var.set(cfg.get('periods', self.periods_var.get()))
         self.prod_cost_var.set(cfg.get('prod_cost', self.prod_cost_var.get()))
         self.inv_cost_var.set(cfg.get('inv_cost', self.inv_cost_var.get()))
+        self.init_inv_var.set(cfg.get('init_inv', self.init_inv_var.get()))
         self.update_inputs()
         demands = cfg.get('demands', [])
         for i, val in enumerate(demands):
