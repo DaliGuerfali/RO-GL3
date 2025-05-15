@@ -9,21 +9,34 @@ from scipy.spatial.distance import euclidean
 import json
 from pathlib import Path
 
-# Dark mode with blue accent
+# Dark mode with green accent
 ctk.set_appearance_mode("dark")
-ctk.set_default_color_theme("blue")
+ctk.set_default_color_theme("green")
 
 class ModernVRPApp:
     def __init__(self, root):
         self.root = root
         self.root.title("VRP Route Optimizer")
         self.root.geometry("800x800")
+        self.root.configure(bg="#23272f")
 
-        self.main_container = ctk.CTkScrollableFrame(self.root)
-        self.main_container.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
+        # Header
+        header = ctk.CTkFrame(self.root, fg_color="#181c22")
+        header.pack(fill=tk.X, pady=(0, 10))
+        ctk.CTkLabel(header, text="Vehicle Routing Problem", font=ctk.CTkFont(size=26, weight="bold"), text_color="#00e676").pack(pady=18)
 
-        self.title_label = ctk.CTkLabel(self.main_container, text="Vehicle Routing Problem", font=ctk.CTkFont(size=24, weight="bold"))
-        self.title_label.pack(pady=10)
+        # Main container
+        self.main_container = ctk.CTkScrollableFrame(self.root, fg_color="#2c313c")
+        self.main_container.pack(fill=tk.BOTH, expand=True, padx=30, pady=20)
+
+        ctk.CTkLabel(self.main_container, text="VRP Route Optimizer", font=ctk.CTkFont(size=20, weight="bold"), text_color="#00e676").pack(pady=10)
+        desc_vrp = (
+            "The vehicle routing problem assigns multiple vehicles to visit a set of\n"
+            "locations with minimal total travel distance. Constraints can include maximum\n"
+            "route lengths and forbidden routes. Gurobi solves a binary optimization model,\n"
+            "and the app displays computed routes and plots them on a map-like graph."
+        )
+        ctk.CTkLabel(self.main_container, text=desc_vrp, font=ctk.CTkFont(size=14), text_color="#ffffff", justify=tk.LEFT, wraplength=600).pack(pady=10, padx=20)
 
         # Number of locations
         self.cities_frame = ctk.CTkFrame(self.main_container)

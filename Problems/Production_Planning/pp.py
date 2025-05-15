@@ -17,12 +17,26 @@ class ProductionPlanningApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Production Planning")
-        self.root.geometry("600x600")
+        self.root.geometry("700x700")
+        self.root.configure(bg="#23272f")
 
-        self.container = ctk.CTkScrollableFrame(self.root)
-        self.container.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
+        # Header
+        header = ctk.CTkFrame(self.root, fg_color="#181c22")
+        header.pack(fill=tk.X, pady=(0, 10))
+        ctk.CTkLabel(header, text="Production Planning", font=ctk.CTkFont(size=26, weight="bold"), text_color="#00e676").pack(pady=18)
 
-        ctk.CTkLabel(self.container, text="Production Planning Problem", font=ctk.CTkFont(size=24, weight="bold")).pack(pady=10)
+        # Main container
+        self.container = ctk.CTkScrollableFrame(self.root, fg_color="#2c313c")
+        self.container.pack(fill=tk.BOTH, expand=True, padx=30, pady=20)
+
+        ctk.CTkLabel(self.container, text="Production Planning Problem", font=ctk.CTkFont(size=20, weight="bold"), text_color="#00e676").pack(pady=10)
+        desc_pp = (
+            "The production planning problem determines the optimal production and\n"
+            "inventory levels over multiple periods to meet forecasted demand at minimal\n"
+            "production and holding costs. The LP model is solved with Gurobi, and results\n"
+            "are plotted to show production vs. inventory trends."
+        )
+        ctk.CTkLabel(self.container, text=desc_pp, font=ctk.CTkFont(size=14), text_color="#ffffff", justify=tk.LEFT, wraplength=600).pack(pady=10, padx=20)
 
         # Period selection
         frame_period = ctk.CTkFrame(self.container)
